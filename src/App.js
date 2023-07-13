@@ -27,7 +27,7 @@ function App() {
         {list.map((pokemon, idx) => {
           return (
             <img
-              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-viii/icons/${pokemon.dexNo}.png`}
+              src={`https://www.smogon.com/forums//media/minisprites/${pokemon.encodeName()}.png`}
               alt={pokemon.name}
             />
           );
@@ -140,14 +140,18 @@ function TextEntryBox({ list, setList, options }) {
       if (pokemon != null) {
         setList((list) => [...list, pokemon]);
       } else {
-        alert("Invalid input.");
+        alert(
+          "Invalid input. Input should be a single importable Pokemon Showdown set."
+        );
       }
     } else {
       pokemon = await getPokemonFromList(text, options);
       if (pokemon != null) {
         setList(list.concat(pokemon));
       } else {
-        alert("Invalid input.");
+        alert(
+          "Invalid input. Input should be a list of Pokemon seperated by commas (ex. Abra,Porygon,Cacnea)"
+        );
       }
     }
   }
@@ -155,7 +159,7 @@ function TextEntryBox({ list, setList, options }) {
     //get list of pokemon from useState
     //generate BBCode and set as output text
     setOutput(generateOutput(list));
-    console.log(list);
+    //console.log(list);
   }
 
   function clearList() {

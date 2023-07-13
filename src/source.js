@@ -26,16 +26,31 @@ export class Pokemon {
 
   getBaseSpeed = async function () {
     const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${this.name.toLowerCase()}`
+      `https://pokeapi.co/api/v2/pokemon/${this.encodeName(this.name)}`
     );
     this.baseSpeed = parseInt((await response.json()).stats[5].base_stat);
   };
 
   getNo = async function () {
     const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${this.name.toLowerCase()}`
+      `https://pokeapi.co/api/v2/pokemon/${this.encodeName(this.name)}`
     );
     this.dexNo = parseInt((await response.json()).id);
+  };
+
+  //encode name for use with pokeAPI
+  encodeName = function () {
+    var encodedName = this.name;
+    encodedName = encodedName.toLowerCase();
+    //replace " " with -
+    encodedName = encodedName.replace(" ", "-");
+    //replace "'" with ""
+    encodedName = encodedName.replace("’", "");
+    //replace ":" with ""
+    encodedName = encodedName.replace(":", "");
+    //replace "." with ""
+    encodedName = encodedName.replace(".", "");
+    return encodedName;
   };
 
   //calculate the base speed stat
@@ -146,10 +161,6 @@ export async function getPokemonFromImportable(importable, options) {
   var speciesString = set.split("\n")[0];
   var name = getSpeciesName(speciesString);
 
-  if (!natureRegex.test(set)) {
-    return null;
-  }
-
   //could be optimized to reduce regex calls
 
   //check if speed IV is not 31, and for speed EVs
@@ -169,7 +180,9 @@ export async function getPokemonFromImportable(importable, options) {
     level = set.match(levelRegex)[0];
   }
 
-  var nature = set.match(natureRegex)[0];
+  if (set.match(natureRegex) != null) {
+    var nature = set.match(natureRegex)[0];
+  }
   var convertedNature = 1;
   switch (nature) {
     case "Timid":
@@ -185,7 +198,7 @@ export async function getPokemonFromImportable(importable, options) {
       convertedNature = 0.9;
       break;
     default:
-      console.log("Unexpected value in nature field.");
+      break;
   }
 
   var pokemon = new Pokemon(
@@ -211,7 +224,10 @@ export function getSpeciesName(speciesString) {
   var bracketRegex = /\(([^()]*)\)/g;
   //if there are no brackets in the string, great! the species is the first word in the line
   if (!bracketRegex.test(species)) {
-    species = species.split(" ")[0];
+    //we split at the "@" sign and not a space because some pokemon have spaces in their names
+    //like scream tail
+    species = species.split("@")[0];
+    species = species.trim();
   } //ok... now things are a bit more annoying
   else {
     species = species.replace("(M)", "");
