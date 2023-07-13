@@ -69,26 +69,13 @@ export class Pokemon {
   };
 }
 
-/* export async function createPokemonList(pokemon) {
-  let pokemonList = [];
-  //sets pokemon up to have max speed investment
-  var tempPokemon = pokemon;
-  tempPokemon.calculatedSpeed = calculateSpeed(tempPokemon);
-  pokemonList.Add(tempPokemon);
-
-  generateOutput(pokemonList);
-} */
-
 //formats the speed tier post and writes it to output.txt
 export function generateOutput(pokemonList) {
   var output = "";
   //sort the list by speed value
-  console.log(pokemonList);
   pokemonList = pokemonList.sort(
     (a, b) => b.calculatedSpeed - a.calculatedSpeed
   );
-  console.log(pokemonList);
-  var currentSpeed = 0;
   //write the start of the table
   output +=
     "[TABLE][TR][TH]Speed[/TH][TH]Sprite[/TH][TH]Pokemon[/TH][TH]Base[/TH][TH]Nature[/TH][TH]IVs[/TH][TH]EVs[/TH][TH]±[/TH][/TR]\n";
@@ -97,31 +84,46 @@ export function generateOutput(pokemonList) {
     var pokemon = pokemonList[i];
     //get current speed
     //check if its the same as last speed
-    if (currentSpeed != pokemon.calculatedSpeed) {
-      output += "\n";
+    output += "\n";
 
-      var nature =
-        pokemon.nature == 1.1
-          ? "Positive"
-          : pokemon.nature == 1
-          ? "Neutral"
-          : "Negative";
-      var speedStage =
-        pokemon.speedStage == 1 ? 0 : pokemon.speedStage == 1.5 ? 1 : 2;
+    var nature =
+      pokemon.nature === 1.1
+        ? "Positive"
+        : pokemon.nature === 1
+        ? "Neutral"
+        : "Negative";
+    var speedStage =
+      pokemon.speedStage === 1 ? 0 : pokemon.speedStage === 1.5 ? 1 : 2;
 
-      //basic line for now, can be improved to add multiple pokemon on one line.
-      output += `[TR][TD]${pokemon.calculatedSpeed}[/TD][TD]:${pokemon.name}:[/TD][TD]${pokemon.name}[/TD][TD]${pokemon.baseSpeed}[/TD][TD]${nature}[/TD][TD]${pokemon.iv}[/TD][TD]${pokemon.ev}[/TD][TD]${speedStage}[/TD][/TR]\n`;
-    }
-    currentSpeed = pokemon.calculatedSpeed;
+    //basic line for now, can be improved to add multiple pokemon on one line.
+    output += `[TR][TD]${pokemon.calculatedSpeed}[/TD][TD]:${pokemon.name}:[/TD][TD]${pokemon.name}[/TD][TD]${pokemon.baseSpeed}[/TD][TD]${nature}[/TD][TD]${pokemon.iv}[/TD][TD]${pokemon.ev}[/TD][TD]${speedStage}[/TD][/TR]\n`;
   }
   output += "[/TABLE]";
   return output;
 }
 
-export async function getPokemonFromList(input) {
-  //for bulk import option
-  //read level, iv, ev, nature, and speedstage from user selected options
-  //generate a list of pokemon accordingly
+//create pokemon data objects based on the provided options
+export async function getPokemonFromList(input, options) {
+  var pokemonNames = input.split(",");
+  var pokemonList = [];
+  for (let i = 0; i < pokemonNames.length; i++) {
+    var name = pokemonNames[i];
+    var pokemon = new Pokemon(
+      name,
+      0,
+      parseInt(options.iv),
+      parseInt(options.ev),
+      parseInt(options.level),
+      parseFloat(options.nature),
+      0,
+      parseInt(options.speedStage)
+    );
+    await pokemon.getBaseSpeed();
+    await pokemon.getNo();
+    await pokemon.calculateSpeed();
+    pokemonList.push(pokemon);
+  }
+  return pokemonList;
 }
 
 //create a pokemon data object from a smogon importable (note: speed still needs to be calculated)
@@ -145,7 +147,6 @@ export async function getPokemonFromImportable(importable, options) {
   var name = getSpeciesName(speciesString);
 
   if (!natureRegex.test(set)) {
-    alert("Invalid input.");
     return null;
   }
 
@@ -154,9 +155,8 @@ export async function getPokemonFromImportable(importable, options) {
   //check if speed IV is not 31, and for speed EVs
   if (ivRegex.test(set)) {
     if (set.match(ivRegex).length >= 1 && set.match(evRegex) != null) {
-      var matches = set.match(ivRegex);
       ev = set.match(ivRegex)[0];
-    } else if (set.match(ivRegex).length == 1) {
+    } else if (set.match(ivRegex).length === 1) {
       iv = set.match(ivRegex)[0];
     }
     if (set.match(ivRegex).length >= 2) {
@@ -184,6 +184,8 @@ export async function getPokemonFromImportable(importable, options) {
     case "Sassy":
       convertedNature = 0.9;
       break;
+    default:
+      console.log("Unexpected value in nature field.");
   }
 
   var pokemon = new Pokemon(
@@ -204,7 +206,6 @@ export async function getPokemonFromImportable(importable, options) {
 }
 
 //function that parses the species from the first line of the importable
-//works as expected after port
 export function getSpeciesName(speciesString) {
   var species = speciesString;
   var bracketRegex = /\(([^()]*)\)/g;

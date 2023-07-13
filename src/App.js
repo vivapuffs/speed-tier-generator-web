@@ -1,7 +1,9 @@
 import "./App.css";
 import { useState } from "react";
-import { Pokemon, generateOutput } from "./source.js";
-import { getSpeciesName } from "./source.js";
+//import { Pokemon } from "./source.js";
+import { generateOutput } from "./source.js";
+//import { getSpeciesName } from "./source.js";
+import { getPokemonFromList } from "./source.js";
 import { getPokemonFromImportable } from "./source.js";
 
 function App() {
@@ -61,7 +63,7 @@ function ImportOptionsToolbar({ options, setOptions }) {
       />
       <label for="importType">Set Import</label>
       <br />
-      {/* <input
+      {/*       <input
         type="radio"
         id="speedSettings"
         name="speedSettings"
@@ -77,12 +79,23 @@ function ImportOptionsToolbar({ options, setOptions }) {
       <label for="speedSettings">Max Speed</label>
       <input
         type="radio"
+        onChange={setOptions({ ...options, iv: 31, ev: 252, nature: 1.0 })}
         id="speedSettings"
         name="speedSettings"
         value="Neutral Nature"
-      /> 
+      />
       <label for="speedSettings">Neutral Nature</label>
       <br /> */}
+      <br />
+      <label for="level">Level: </label>
+      <input
+        type="text"
+        size="3"
+        onChange={(e) => setOptions({ ...options, level: e.target.value })}
+        id="level"
+        name="level"
+      />
+      <br />
       <p>Speed stage:</p>
       <input
         type="radio"
@@ -108,14 +121,6 @@ function ImportOptionsToolbar({ options, setOptions }) {
         value="2"
       />
       <label for="speedStage">+2</label>
-      {/*<br />
-      <label for="level">Level:</label>
-      <input
-        type="text"
-        onChange={(e) => setOptions({...options, level: e.target.value})}
-        id="level"
-        name="level"
-      /> */}
     </form>
   );
 }
@@ -129,19 +134,28 @@ function TextEntryBox({ list, setList, options }) {
     //if bulk, get the list from the input textbox, generate a pokemon list, then add that list to the list.
     //
     //if set, get set from input textbox and add it to the list.
-    if (options.mode == "set") {
-      var pokemon = await getPokemonFromImportable(text, options);
+    var pokemon;
+    if (options.mode === "set") {
+      pokemon = await getPokemonFromImportable(text, options);
       if (pokemon != null) {
         setList((list) => [...list, pokemon]);
+      } else {
+        alert("Invalid input.");
       }
     } else {
-      alert("Bulk importing is not supported yet.");
+      pokemon = await getPokemonFromList(text, options);
+      if (pokemon != null) {
+        setList(list.concat(pokemon));
+      } else {
+        alert("Invalid input.");
+      }
     }
   }
   function generateClick() {
     //get list of pokemon from useState
     //generate BBCode and set as output text
     setOutput(generateOutput(list));
+    console.log(list);
   }
 
   function clearList() {
@@ -171,15 +185,6 @@ function TextEntryBox({ list, setList, options }) {
       <button onClick={generateClick}>Generate speed tier list</button>
     </>
   );
-}
-
-async function getNoFromName(pokemonName) {
-  var no = 0;
-  const response = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/${pokemonName}`
-  );
-  no = await response.json.id;
-  return no;
 }
 
 export default App;
