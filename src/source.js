@@ -123,21 +123,33 @@ export async function getPokemonFromList(input, options) {
   var pokemonList = [];
   for (let i = 0; i < pokemonNames.length; i++) {
     var name = pokemonNames[i];
-    var pokemon = new Pokemon(
-      name,
-      0,
-      parseInt(options.iv),
-      parseInt(options.ev),
-      parseInt(options.level),
-      parseFloat(options.nature),
-      0,
-      parseInt(options.speedStage)
+
+    //check if input is a valid pokemon
+    //bug - pokemon/ returns 200 - maybe there is a better way to solve this
+    var response = await fetch(
+      `https://pokeapi.co/api/v2/pokemon/${encodeName(name)}`
     );
-    await pokemon.getBaseSpeed();
-    await pokemon.getNo();
-    await pokemon.calculateSpeed();
-    pokemonList.push(pokemon);
+
+    if (response.status === 200) {
+      var pokemon = new Pokemon(
+        name,
+        0,
+        parseInt(options.iv),
+        parseInt(options.ev),
+        parseInt(options.level),
+        parseFloat(options.nature),
+        0,
+        parseInt(options.speedStage)
+      );
+      await pokemon.getBaseSpeed();
+      await pokemon.getNo();
+      await pokemon.calculateSpeed();
+      pokemonList.push(pokemon);
+    } else {
+      console.log("invalid pokemon found in input. skipping");
+    }
   }
+  console.log(pokemonList);
   return pokemonList;
 }
 
@@ -157,65 +169,70 @@ export async function getPokemonFromImportable(importable, options) {
   var ev = 0;
   var level = 100;
 
-  //need to parse name from first line
-  var speciesString = set.split("\n")[0];
-  var name = getSpeciesName(speciesString);
+  try {
+    //need to parse name from first line
+    var speciesString = set.split("\n")[0];
+    var name = getSpeciesName(speciesString);
 
-  //could be optimized to reduce regex calls
+    //could be optimized to reduce regex calls
 
-  //check if speed IV is not 31, and for speed EVs
-  if (ivRegex.test(set)) {
-    if (set.match(ivRegex).length >= 1 && set.match(evRegex) != null) {
-      ev = set.match(ivRegex)[0];
-    } else if (set.match(ivRegex).length === 1) {
-      iv = set.match(ivRegex)[0];
+    //check if speed IV is not 31, and for speed EVs
+    if (ivRegex.test(set)) {
+      if (set.match(ivRegex).length >= 1 && set.match(evRegex) != null) {
+        ev = set.match(ivRegex)[0];
+      } else if (set.match(ivRegex).length === 1) {
+        iv = set.match(ivRegex)[0];
+      }
+      if (set.match(ivRegex).length >= 2) {
+        ev = set.match(ivRegex)[0];
+        iv = set.match(ivRegex)[1];
+      }
     }
-    if (set.match(ivRegex).length >= 2) {
-      ev = set.match(ivRegex)[0];
-      iv = set.match(ivRegex)[1];
+
+    if (set.match(levelRegex) != null) {
+      level = set.match(levelRegex)[0];
     }
-  }
 
-  if (set.match(levelRegex) != null) {
-    level = set.match(levelRegex)[0];
-  }
+    if (set.match(natureRegex) != null) {
+      var nature = set.match(natureRegex)[0];
+    }
+    var convertedNature = 1;
+    switch (nature) {
+      case "Timid":
+      case "Hasty":
+      case "Jolly":
+      case "Naive":
+        convertedNature = 1.1;
+        break;
+      case "Brave":
+      case "Relaxed":
+      case "Quiet":
+      case "Sassy":
+        convertedNature = 0.9;
+        break;
+      default:
+        break;
+    }
 
-  if (set.match(natureRegex) != null) {
-    var nature = set.match(natureRegex)[0];
+    var pokemon = new Pokemon(
+      name,
+      0,
+      iv,
+      ev,
+      level,
+      convertedNature,
+      0,
+      parseInt(options.speedStage)
+    );
+    await pokemon.getBaseSpeed();
+    await pokemon.getNo();
+    await pokemon.calculateSpeed();
+    return pokemon;
+    //return `[TR][TD]${pokemon.calculatedSpeed}[/TD][TD]:${pokemon.name}:[/TD][TD]${pokemon.name}[/TD][TD]${pokemon.baseSpeed}[/TD][TD]${nature}[/TD][TD]${pokemon.iv}[/TD][TD]${pokemon.ev}[/TD][TD]${pokemon.speedStage}[/TD][/TR]\n`;
+  } catch (error) {
+    console.log("error parsing set");
+    return null;
   }
-  var convertedNature = 1;
-  switch (nature) {
-    case "Timid":
-    case "Hasty":
-    case "Jolly":
-    case "Naive":
-      convertedNature = 1.1;
-      break;
-    case "Brave":
-    case "Relaxed":
-    case "Quiet":
-    case "Sassy":
-      convertedNature = 0.9;
-      break;
-    default:
-      break;
-  }
-
-  var pokemon = new Pokemon(
-    name,
-    0,
-    iv,
-    ev,
-    level,
-    convertedNature,
-    0,
-    parseInt(options.speedStage)
-  );
-  await pokemon.getBaseSpeed();
-  await pokemon.getNo();
-  await pokemon.calculateSpeed();
-  //return `[TR][TD]${pokemon.calculatedSpeed}[/TD][TD]:${pokemon.name}:[/TD][TD]${pokemon.name}[/TD][TD]${pokemon.baseSpeed}[/TD][TD]${nature}[/TD][TD]${pokemon.iv}[/TD][TD]${pokemon.ev}[/TD][TD]${pokemon.speedStage}[/TD][/TR]\n`;
-  return pokemon;
 }
 
 //function that parses the species from the first line of the importable
@@ -245,4 +262,17 @@ export function getSpeciesName(speciesString) {
   species = species.replace("(", "");
   species = species.replace(")", "");
   return species;
+}
+function encodeName(name) {
+  var encodedName = name;
+  encodedName = encodedName.toLowerCase();
+  //replace " " with -
+  encodedName = encodedName.replace(" ", "-");
+  //replace "'" with ""
+  encodedName = encodedName.replace("’", "");
+  //replace ":" with ""
+  encodedName = encodedName.replace(":", "");
+  //replace "." with ""
+  encodedName = encodedName.replace(".", "");
+  return encodedName;
 }
