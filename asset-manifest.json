@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/speed-tier-generator-web/static/css/main.08764c20.css",
-    "main.js": "/speed-tier-generator-web/static/js/main.4f1743dd.js",
+    "main.js": "/speed-tier-generator-web/static/js/main.bc5d442a.js",
     "static/js/787.471bb62c.chunk.js": "/speed-tier-generator-web/static/js/787.471bb62c.chunk.js",
     "index.html": "/speed-tier-generator-web/index.html",
     "main.08764c20.css.map": "/speed-tier-generator-web/static/css/main.08764c20.css.map",
-    "main.4f1743dd.js.map": "/speed-tier-generator-web/static/js/main.4f1743dd.js.map",
+    "main.bc5d442a.js.map": "/speed-tier-generator-web/static/js/main.bc5d442a.js.map",
     "787.471bb62c.chunk.js.map": "/speed-tier-generator-web/static/js/787.471bb62c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.08764c20.css",
-    "static/js/main.4f1743dd.js"
+    "static/js/main.bc5d442a.js"
   ]
 }
