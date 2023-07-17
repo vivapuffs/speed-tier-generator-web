@@ -19,7 +19,7 @@ export class Pokemon {
     this.ev = parseInt(pokemonEv); //the evs to use in pokemon speed calculation
     this.level = parseInt(pokemonLevel); //the level of the pokemon
     this.nature = pokemonNature; //the pokemon's nature: 0.9 = lowering nature, 1 = neutral nature, 1.1 = raising nature
-    this.speedStage = parseInt(pokemonSpeedStage); //the stat boost (if any) applied to the speed stat: 1 = no boost, 1.5 = +1, 2 = +2
+    this.speedStage = parseFloat(pokemonSpeedStage); //the stat boost (if any) applied to the speed stat: 1 = no boost, 1.5 = +1, 2 = +2
 
     this.calculatedSpeed = parseInt(pokemonCalculatedSpeed); //the calculated speed of the pokemon
   }
@@ -139,7 +139,7 @@ export async function getPokemonFromList(input, options) {
         parseInt(options.level),
         parseFloat(options.nature),
         0,
-        parseInt(options.speedStage)
+        parseFloat(options.speedStage)
       );
       await pokemon.getBaseSpeed();
       await pokemon.getNo();
@@ -222,7 +222,7 @@ export async function getPokemonFromImportable(importable, options) {
       level,
       convertedNature,
       0,
-      parseInt(options.speedStage)
+      parseFloat(options.speedStage)
     );
     await pokemon.getBaseSpeed();
     await pokemon.getNo();

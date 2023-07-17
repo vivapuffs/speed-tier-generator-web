@@ -1,8 +1,12 @@
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+
 import "./App.css";
 import { useState } from "react";
-//import { Pokemon } from "./source.js";
+import Badge from "@mui/material/Badge";
 import { generateOutput } from "./source.js";
-//import { getSpeciesName } from "./source.js";
 import { getPokemonFromList } from "./source.js";
 import { getPokemonFromImportable } from "./source.js";
 
@@ -19,6 +23,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+        />
         <h1>Options</h1>
         <ImportOptionsToolbar options={options} setOptions={setOptions} />
         <h1>Enter sets here...</h1>
@@ -26,10 +34,12 @@ function App() {
         <h1>Added Pokemon:</h1>
         {list.map((pokemon, idx) => {
           return (
-            <img
-              src={`https://www.smogon.com/forums//media/minisprites/${pokemon.encodeName()}.png`}
-              alt={pokemon.name}
-            />
+            <Badge badgeContent={pokemon.speedStage} color="success">
+              <img
+                src={`https://www.smogon.com/forums//media/minisprites/${pokemon.encodeName()}.png`}
+                alt={pokemon.name}
+              />
+            </Badge>
           );
         })}
       </header>
@@ -126,8 +136,8 @@ function ImportOptionsToolbar({ options, setOptions }) {
 }
 
 function TextEntryBox({ list, setList, options }) {
-  const [text, setText] = useState("Enter your set(s) here...");
-  const [output, setOutput] = useState("BBCode will appear here...");
+  const [text, setText] = useState("");
+  const [output, setOutput] = useState("");
 
   async function addClick() {
     //add if/else to check if the mode is Bulk or Set
@@ -163,7 +173,13 @@ function TextEntryBox({ list, setList, options }) {
   }
 
   function clearList() {
-    setList([]);
+    if (window.confirm("Are you sure you want to clear the list?")) {
+      setList([]);
+    }
+  }
+
+  function copyToClipboard() {
+    navigator.clipboard.writeText(output);
   }
 
   return (
@@ -173,7 +189,7 @@ function TextEntryBox({ list, setList, options }) {
         name="textInput"
         rows="10"
         cols="50"
-        value={text}
+        placeholder="Enter your set or list of Pokemon here..."
         onChange={(e) => setText(e.target.value)}
       ></textarea>
       <textarea
@@ -181,12 +197,16 @@ function TextEntryBox({ list, setList, options }) {
         name="textOutput"
         rows="10"
         cols="50"
+        placeholder="BBCode will appear here..."
         value={output}
       ></textarea>
       <br />
       <button onClick={addClick}>Add to list</button>
       <button onClick={clearList}>Clear list</button>
-      <button onClick={generateClick}>Generate speed tier list</button>
+      <button onClick={generateClick}>
+        Generate speed tier list from added Pokemon
+      </button>
+      <button onClick={copyToClipboard}>Copy output to clipboard</button>
     </>
   );
 }
