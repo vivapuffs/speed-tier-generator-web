@@ -85,7 +85,7 @@ export class Pokemon {
 }
 
 //formats the speed tier post and writes it to output.txt
-export function generateOutput(pokemonList) {
+export function generateOutput(pokemonList, speedStageConversionTable) {
   var output = "";
   //sort the list by speed value
   pokemonList = pokemonList.sort(
@@ -107,11 +107,15 @@ export function generateOutput(pokemonList) {
         : pokemon.nature === 1
         ? "Neutral"
         : "Negative";
-    var speedStage =
-      pokemon.speedStage === 1 ? 0 : pokemon.speedStage === 1.5 ? 1 : 2;
 
     //basic line for now, can be improved to add multiple pokemon on one line.
-    output += `[TR][TD]${pokemon.calculatedSpeed}[/TD][TD]:${pokemon.name}:[/TD][TD]${pokemon.name}[/TD][TD]${pokemon.baseSpeed}[/TD][TD]${nature}[/TD][TD]${pokemon.iv}[/TD][TD]${pokemon.ev}[/TD][TD]${speedStage}[/TD][/TR]\n`;
+    output += `[TR][TD]${pokemon.calculatedSpeed}[/TD][TD]:${
+      pokemon.name
+    }:[/TD][TD]${pokemon.name}[/TD][TD]${
+      pokemon.baseSpeed
+    }[/TD][TD]${nature}[/TD][TD]${pokemon.iv}[/TD][TD]${pokemon.ev}[/TD][TD]${
+      speedStageConversionTable[pokemon.speedStage]
+    }[/TD][/TR]\n`;
   }
   output += "[/TABLE]";
   return output;
@@ -125,21 +129,21 @@ export async function getPokemonFromList(input, options) {
     var name = pokemonNames[i];
 
     //check if input is a valid pokemon
-    //bug - pokemon/ returns 200 - maybe there is a better way to solve this
     var response = await fetch(
       `https://pokeapi.co/api/v2/pokemon/${encodeName(name)}`
     );
 
-    if (response.status === 200) {
+    //pokemon/ will return 200, so we also need to check for a blank name
+    if (response.status === 200 && name !== "") {
       var pokemon = new Pokemon(
         name,
         0,
-        parseInt(options.iv),
-        parseInt(options.ev),
-        parseInt(options.level),
-        parseFloat(options.nature),
+        options.iv,
+        options.ev,
+        options.level,
+        options.nature,
         0,
-        parseFloat(options.speedStage)
+        options.speedStage
       );
       await pokemon.getBaseSpeed();
       await pokemon.getNo();
@@ -222,7 +226,7 @@ export async function getPokemonFromImportable(importable, options) {
       level,
       convertedNature,
       0,
-      parseFloat(options.speedStage)
+      options.speedStage
     );
     await pokemon.getBaseSpeed();
     await pokemon.getNo();
@@ -263,6 +267,7 @@ export function getSpeciesName(speciesString) {
   species = species.replace(")", "");
   return species;
 }
+
 function encodeName(name) {
   var encodedName = name;
   encodedName = encodedName.toLowerCase();

@@ -1,3 +1,13 @@
 textarea {
   resize: none;
 }
+
+div {
+  display: inline-block;
+}
+
+.divider {
+  width: 5px;
+  height: auto;
+  display: inline-block;
+}
