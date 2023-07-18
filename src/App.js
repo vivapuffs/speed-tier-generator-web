@@ -11,7 +11,13 @@ import Badge from "@mui/material/Badge";
 
 function App() {
   //so badges show properly
-  const speedStageConversionTable = { 1: 0, 1.5: "+1", 2: "+2" };
+  const speedStageConversionTable = {
+    0.5: "-2",
+    0.67: "-1",
+    1: 0,
+    1.5: "+1",
+    2: "+2",
+  };
   const [list, setList] = useState([]);
   const [options, setOptions] = useState({
     mode: "set",
@@ -38,7 +44,7 @@ function App() {
           return (
             <Badge
               badgeContent={speedStageConversionTable[pokemon.speedStage]}
-              color="success"
+              color={parseInt(pokemon.speedStage) > 0 ? "success" : "error"}
             >
               <img
                 src={`https://www.smogon.com/forums//media/minisprites/${pokemon.encodeName()}.png`}

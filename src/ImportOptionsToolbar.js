@@ -28,7 +28,24 @@ export default function ImportOptionsToolbar({ options, setOptions }) {
         name="level"
       />
       <br />
-      <p>Speed stage:</p>
+      <p>Speed stage (default is 0:)</p>
+      <input
+        type="radio"
+        onChange={(e) => setOptions({ ...options, speedStage: e.target.value })}
+        id="speedStage"
+        name="speedStage"
+        value="0.5"
+      />
+      <label for="speedStage">-2</label>
+      <input
+        type="radio"
+        onChange={(e) => setOptions({ ...options, speedStage: e.target.value })}
+        id="speedStage"
+        name="speedStage"
+        value="0.67"
+      />
+      <label for="speedStage">-1</label>
+
       <input
         type="radio"
         onChange={(e) => setOptions({ ...options, speedStage: e.target.value })}

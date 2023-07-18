@@ -2,13 +2,17 @@ import { useState } from "react";
 import { generateOutput } from "./source.js";
 import { getPokemonFromList } from "./source.js";
 import { getPokemonFromImportable } from "./source.js";
-import { getForeignName } from "./source.js";
-import { Pokemon } from "./source.js";
 
 export default function TextEntryBox({ list, setList, options }) {
   const [text, setText] = useState("");
   const [output, setOutput] = useState("");
-  const speedStageConversionTable = { 1: 0, 1.5: "+1", 2: "+2" };
+  const speedStageConversionTable = {
+    0.5: "-2",
+    0.67: "-1",
+    1: 0,
+    1.5: "+1",
+    2: "+2",
+  };
 
   async function addClick() {
     //add if/else to check if the mode is Bulk or Set
