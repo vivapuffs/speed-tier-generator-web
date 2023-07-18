@@ -15,6 +15,7 @@ export default function ImportOptionsToolbar({ options, setOptions }) {
         id="importType"
         name="importType"
         value="set"
+        defaultChecked
       />
       <label for="importType">Set Import</label>
       <br />
@@ -26,9 +27,10 @@ export default function ImportOptionsToolbar({ options, setOptions }) {
         onChange={(e) => setOptions({ ...options, level: e.target.value })}
         id="level"
         name="level"
+        placeholder="100"
       />
       <br />
-      <p>Speed stage (default is 0:)</p>
+      <p>Speed stage:</p>
       <input
         type="radio"
         onChange={(e) => setOptions({ ...options, speedStage: e.target.value })}
@@ -52,6 +54,7 @@ export default function ImportOptionsToolbar({ options, setOptions }) {
         id="speedStage"
         name="speedStage"
         value="1"
+        defaultChecked
       />
       <label for="speedStage">0</label>
       <input
@@ -71,13 +74,14 @@ export default function ImportOptionsToolbar({ options, setOptions }) {
       />
       <label for="speedStage">+2</label>
       <br />
-      <p>Output Language (default is en):</p>
+      <p>Output Language:</p>
       <input
         type="radio"
         onChange={(e) => setOptions({ ...options, language: e.target.value })}
         id="language"
         name="language"
         value="en"
+        defaultChecked
       />
       <label for="language">en</label>
       <input
