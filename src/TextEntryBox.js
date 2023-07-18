@@ -2,7 +2,7 @@ import { useState } from "react";
 import { generateOutput } from "./source.js";
 import { getPokemonFromList } from "./source.js";
 import { getPokemonFromImportable } from "./source.js";
-import { getForeignNames } from "./source.js";
+import { getForeignName } from "./source.js";
 import { Pokemon } from "./source.js";
 
 export default function TextEntryBox({ list, setList, options }) {
@@ -36,22 +36,18 @@ export default function TextEntryBox({ list, setList, options }) {
       }
     }
   }
-  function generateClick() {
+  async function generateClick() {
     //get list of pokemon from useState
     //generate BBCode and set as output text
-    setOutput(generateOutput(list, speedStageConversionTable));
+    setOutput(
+      await generateOutput(list, speedStageConversionTable, options.language)
+    );
   }
 
   function clearList() {
     if (window.confirm("Are you sure you want to clear the list?")) {
       setList([]);
     }
-  }
-
-  function testFunction() {
-    var testPokemon = new Pokemon("mew", 100, 31, 252, 100, 1.1, 0, 1);
-    testPokemon.dexNo = 151;
-    console.log(getForeignNames(testPokemon));
   }
 
   function copyToClipboard() {
@@ -90,9 +86,6 @@ export default function TextEntryBox({ list, setList, options }) {
         </button>
         <div class="divider" />
         <button onClick={copyToClipboard}>Copy output to clipboard</button>
-        {
-          //<button onClick={testFunction}>my test button</button>
-        }
       </div>
     </>
   );

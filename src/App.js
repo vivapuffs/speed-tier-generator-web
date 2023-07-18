@@ -20,6 +20,7 @@ function App() {
     nature: 1.1,
     speedStage: 1,
     level: 100,
+    language: "en",
   });
   return (
     <div className="App">

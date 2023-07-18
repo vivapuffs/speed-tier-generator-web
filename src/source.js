@@ -85,7 +85,11 @@ export class Pokemon {
 }
 
 //formats the speed tier post and writes it to output.txt
-export function generateOutput(pokemonList, speedStageConversionTable) {
+export async function generateOutput(
+  pokemonList,
+  speedStageConversionTable,
+  language
+) {
   var output = "";
   //sort the list by speed value
   pokemonList = pokemonList.sort(
@@ -111,9 +115,11 @@ export function generateOutput(pokemonList, speedStageConversionTable) {
     //basic line for now, can be improved to add multiple pokemon on one line.
     output += `[TR][TD]${pokemon.calculatedSpeed}[/TD][TD]:${
       pokemon.name
-    }:[/TD][TD]${pokemon.name}[/TD][TD]${
-      pokemon.baseSpeed
-    }[/TD][TD]${nature}[/TD][TD]${pokemon.iv}[/TD][TD]${pokemon.ev}[/TD][TD]${
+    }:[/TD][TD]${
+      language === "en" ? pokemon.name : await getForeignName(pokemon, language)
+    }[/TD][TD]${pokemon.baseSpeed}[/TD][TD]${nature}[/TD][TD]${
+      pokemon.iv
+    }[/TD][TD]${pokemon.ev}[/TD][TD]${
       speedStageConversionTable[pokemon.speedStage]
     }[/TD][/TR]\n`;
   }
@@ -268,16 +274,19 @@ export function getSpeciesName(speciesString) {
   return species;
 }
 
-export async function getForeignNames(pokemon) {
+export async function getForeignName(pokemon, language) {
+  await pokemon.getNo();
   const response = await fetch(
     `https://pokeapi.co/api/v2/pokemon-species/${pokemon.dexNo}`
   );
   var rawNames = (await response.json()).names;
-  var names = [];
+  var name;
   for (let i = 0; i < rawNames.length; i++) {
-    names.push(rawNames[i].name);
+    if (rawNames[i].language.name === language) {
+      name = rawNames[i].name;
+    }
   }
-  return names;
+  return name;
 }
 
 function encodeName(name) {

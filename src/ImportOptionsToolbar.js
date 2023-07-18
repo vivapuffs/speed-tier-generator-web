@@ -53,6 +53,86 @@ export default function ImportOptionsToolbar({ options, setOptions }) {
         value="2"
       />
       <label for="speedStage">+2</label>
+      <br />
+      <p>Output Language (default is en):</p>
+      <input
+        type="radio"
+        onChange={(e) => setOptions({ ...options, language: e.target.value })}
+        id="language"
+        name="language"
+        value="en"
+      />
+      <label for="language">en</label>
+      <input
+        type="radio"
+        onChange={(e) => setOptions({ ...options, language: e.target.value })}
+        id="language"
+        name="language"
+        value="ja-Hrkt"
+      />
+      <label for="language">ja</label>
+      <input
+        type="radio"
+        onChange={(e) => setOptions({ ...options, language: e.target.value })}
+        id="language"
+        name="language"
+        value="ko"
+      />
+      <label for="language">ko</label>
+
+      <input
+        type="radio"
+        onChange={(e) => setOptions({ ...options, language: e.target.value })}
+        id="language"
+        name="language"
+        value="zh-Hant"
+      />
+      <label for="language">cn</label>
+
+      <input
+        type="radio"
+        onChange={(e) => setOptions({ ...options, language: e.target.value })}
+        id="language"
+        name="language"
+        value="fr"
+      />
+      <label for="language">fr</label>
+
+      <input
+        type="radio"
+        onChange={(e) => setOptions({ ...options, language: e.target.value })}
+        id="language"
+        name="language"
+        value="de"
+      />
+      <label for="language">de</label>
+
+      <input
+        type="radio"
+        onChange={(e) => setOptions({ ...options, language: e.target.value })}
+        id="language"
+        name="language"
+        value="es"
+      />
+      <label for="language">es</label>
+
+      <input
+        type="radio"
+        onChange={(e) => setOptions({ ...options, language: e.target.value })}
+        id="language"
+        name="language"
+        value="it"
+      />
+      <label for="language">it</label>
+
+      <input
+        type="radio"
+        onChange={(e) => setOptions({ ...options, language: e.target.value })}
+        id="language"
+        name="language"
+        value="zh-Hans"
+      />
+      <label for="language">cn (simplified)</label>
     </form>
   );
 }
