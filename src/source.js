@@ -268,6 +268,18 @@ export function getSpeciesName(speciesString) {
   return species;
 }
 
+export async function getForeignNames(pokemon) {
+  const response = await fetch(
+    `https://pokeapi.co/api/v2/pokemon-species/${pokemon.dexNo}`
+  );
+  var rawNames = (await response.json()).names;
+  var names = [];
+  for (let i = 0; i < rawNames.length; i++) {
+    names.push(rawNames[i].name);
+  }
+  return names;
+}
+
 function encodeName(name) {
   var encodedName = name;
   encodedName = encodedName.toLowerCase();
