@@ -168,7 +168,7 @@ export async function getPokemonFromImportable(importable, options) {
 
   var set = importable;
 
-  const ivRegex = /\w+(?=\s+Spe)/g;
+  const ivRegex = /\d+(?=\s+Spe)/g;
   //lazy solution
   const evRegex = /(EVs:)/;
   const levelRegex = /(?<=Level: )[0-9]+/g;
@@ -188,11 +188,14 @@ export async function getPokemonFromImportable(importable, options) {
     //check if speed IV is not 31, and for speed EVs
     if (ivRegex.test(set)) {
       if (set.match(ivRegex).length >= 1 && set.match(evRegex) != null) {
+        console.log(set.match(ivRegex)[0]);
         ev = set.match(ivRegex)[0];
       } else if (set.match(ivRegex).length === 1) {
         iv = set.match(ivRegex)[0];
       }
+      //if there are specified IVs and EVs, set both
       if (set.match(ivRegex).length >= 2) {
+        console.log("IV and EV");
         ev = set.match(ivRegex)[0];
         iv = set.match(ivRegex)[1];
       }
