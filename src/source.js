@@ -159,7 +159,6 @@ export async function getPokemonFromList(input, options) {
       console.log("invalid pokemon found in input. skipping");
     }
   }
-  console.log(pokemonList);
   return pokemonList;
 }
 
@@ -257,15 +256,17 @@ export function getSpeciesName(speciesString) {
     species = species.trim();
   } //ok... now things are a bit more annoying
   else {
+    //store matches in a variable so we can access them after we remove gender marker
+    var matches = species.match(bracketRegex);
     species = species.replace("(M)", "");
     species = species.replace("(F)", "");
     //now check if there is more than 1 match for brackets
     if (species.match(bracketRegex).length > 1) {
-      var index = species.match(bracketRegex).length - 1;
-      species = species.match(bracketRegex)[index];
+      var index = matches.length - 1;
+      species = matches[index];
     } //if there's only 1 match for the brackets, then that is the species name
     else {
-      species = species.match(bracketRegex)[0];
+      species = matches[0];
     }
   }
   //check if var has a ( or ) and remove them
