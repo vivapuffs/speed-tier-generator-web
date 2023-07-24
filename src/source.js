@@ -169,8 +169,6 @@ export async function getPokemonFromImportable(importable, options) {
   var set = importable;
 
   const ivRegex = /\d+(?=\s+Spe)/g;
-  //lazy solution
-  const evRegex = /(EVs:)/;
   const levelRegex = /(?<=Level: )[0-9]+/g;
   const natureRegex = /\w+(?= Nature)/g;
 
@@ -187,15 +185,35 @@ export async function getPokemonFromImportable(importable, options) {
 
     //check if speed IV is not 31, and for speed EVs
     if (ivRegex.test(set)) {
-      if (set.match(ivRegex).length >= 1 && set.match(evRegex) != null) {
-        ev = set.match(ivRegex)[0];
-      } else if (set.match(ivRegex).length === 1) {
-        iv = set.match(ivRegex)[0];
-      }
+      console.log(set.match(ivRegex));
+
       //if there are specified IVs and EVs, set both
       if (set.match(ivRegex).length >= 2) {
+        console.log("EV and IV");
         ev = set.match(ivRegex)[0];
         iv = set.match(ivRegex)[1];
+      }
+      //if there is only one match, figure out if it's IV or EV
+      else if (set.match(ivRegex).length === 1) {
+        console.log("IV or EV only");
+        var splitSet = set.split("\n");
+        splitSet.splice(0, 1); //chop off the name to prevent any weird nicknames from interferring with IV/EV detection
+        //check if splitSet contains a line with "IVs"
+        var IVline = splitSet.find((element) => element.includes("IVs: "));
+        if (IVline) {
+          //check if the IVs line contains "Spe"
+          if (IVline.includes("Spe")) {
+            iv = set.match(ivRegex)[0];
+          }
+          //if it doesn't, the Spe is EVs
+          else {
+            ev = set.match(ivRegex)[0];
+          }
+        }
+        //if splitSet doesn't have any lines with IVs, the Spe must be EVs
+        else {
+          ev = set.match(ivRegex)[0];
+        }
       }
     }
 
