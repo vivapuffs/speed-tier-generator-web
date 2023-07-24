@@ -87,7 +87,6 @@ describe("import set: ", async () => {
     - Substitute`;
 
     var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
-    console.log(pokemon);
     expect(pokemon.name).to.equal("Smoochum");
   });
 });

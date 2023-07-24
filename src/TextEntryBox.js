@@ -22,7 +22,6 @@ export default function TextEntryBox({ list, setList, options }) {
     var pokemon;
     if (options.mode === "set") {
       pokemon = await getPokemonFromImportable(text, options);
-      console.log(pokemon);
       if (pokemon != null) {
         setList((list) => [...list, pokemon]);
       } else {

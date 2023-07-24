@@ -180,22 +180,17 @@ export async function getPokemonFromImportable(importable, options) {
     //need to parse name from first line
     var speciesString = set.split("\n")[0];
     var name = getSpeciesName(speciesString);
-    console.log(name);
     //could be optimized to reduce regex calls
 
     //check if speed IV is not 31, and for speed EVs
     if (ivRegex.test(set)) {
-      console.log(set.match(ivRegex));
-
       //if there are specified IVs and EVs, set both
       if (set.match(ivRegex).length >= 2) {
-        console.log("EV and IV");
         ev = set.match(ivRegex)[0];
         iv = set.match(ivRegex)[1];
       }
       //if there is only one match, figure out if it's IV or EV
       else if (set.match(ivRegex).length === 1) {
-        console.log("IV or EV only");
         var splitSet = set.split("\n");
         splitSet.splice(0, 1); //chop off the name to prevent any weird nicknames from interferring with IV/EV detection
         //check if splitSet contains a line with "IVs"
@@ -267,8 +262,6 @@ export async function getPokemonFromImportable(importable, options) {
 export function getSpeciesName(speciesString) {
   var species = speciesString;
   var bracketRegex = /\(([^()]*)\)/g;
-
-  console.log(species);
   //remove gender markers
   species = species.replace("(M)", "");
   species = species.replace("(F)", "");
