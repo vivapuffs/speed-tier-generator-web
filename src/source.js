@@ -180,7 +180,7 @@ export async function getPokemonFromImportable(importable, options) {
     //need to parse name from first line
     var speciesString = set.split("\n")[0];
     var name = getSpeciesName(speciesString);
-
+    console.log(name);
     //could be optimized to reduce regex calls
 
     //check if speed IV is not 31, and for speed EVs
@@ -267,6 +267,11 @@ export async function getPokemonFromImportable(importable, options) {
 export function getSpeciesName(speciesString) {
   var species = speciesString;
   var bracketRegex = /\(([^()]*)\)/g;
+
+  console.log(species);
+  //remove gender markers
+  species = species.replace("(M)", "");
+  species = species.replace("(F)", "");
   //if there are no brackets in the string, great! the species is the first word in the line
   if (!bracketRegex.test(species)) {
     //we split at the "@" sign and not a space because some pokemon have spaces in their names
@@ -275,10 +280,8 @@ export function getSpeciesName(speciesString) {
     species = species.trim();
   } //ok... now things are a bit more annoying
   else {
-    //store matches in a variable so we can access them after we remove gender marker
+    //store matches in a variable so we can access them later
     var matches = species.match(bracketRegex);
-    species = species.replace("(M)", "");
-    species = species.replace("(F)", "");
     //now check if there is more than 1 match for brackets
     if (species.match(bracketRegex).length > 1) {
       var index = matches.length - 1;
