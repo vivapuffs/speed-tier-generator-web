@@ -1,3 +1,6 @@
+//TODOs:
+//write function for verifying pokemon name exists instead of copypasting
+
 //class for storing pokemon data
 export class Pokemon {
   constructor(
@@ -303,6 +306,63 @@ export async function getForeignName(pokemon, language) {
     }
   }
   return name;
+}
+
+//take in existing BBCode speed tier list and parse it
+export async function convertBBCodeToList(data, speedStageConversionTable) {
+  let parsedList = data; //needs to be list of Pokemon objects
+  //first line is the table header so just remove it
+  //data order: calculatedSpeed, sprite, name, base speed, nature, IVs, EVs, boosts
+  //clean out [/TD]s
+  parsedList = parsedList.replaceAll("[/TD]", "");
+  //split list so we can access the values in it
+  parsedList = parsedList.split("[TD]");
+  //remove first line from list (table header)
+  parsedList.splice(0, 1);
+  //now that the data is split properly, convert it to pokemon objects
+  var pokemonList = [];
+  //each pokemon in the list has 8 array elements related to it
+  for (let i = 0; i < parsedList.length; i += 8) {
+    var name = parsedList[i + 2];
+
+    //see comment re: validation below
+    //var response = await fetch(
+    //  `https://pokeapi.co/api/v2/pokemon/${encodeName(name)}`
+    //);
+
+    //determine nature
+    var nature =
+      parsedList[i + 4] === "Positive"
+        ? 1.1
+        : parsedList[i + 4] === "Neutral"
+        ? 1
+        : 0.9;
+
+    //determine speed stage
+    var speedStage = parsedList[i + 7];
+    var index = speedStage.indexOf("[");
+    speedStage = speedStage.slice(0, index);
+    speedStage = speedStageConversionTable[speedStage];
+
+    //pokemon taken from a speed tier list SHOULD have a valid name, but this can be uncommented if there are problems
+    //if (response.status === 200 && name !== "") {
+    var pokemon = new Pokemon(
+      name,
+      parsedList[i + 3],
+      parsedList[i + 5],
+      parsedList[i + 6],
+      5, //need to provide an input option for this
+      nature,
+      parsedList[i],
+      speedStage
+    );
+    await pokemon.getNo();
+    pokemonList.push(pokemon);
+    //} else {
+    //  console.log("invalid pokemon found in input. skipping");
+    //}
+  }
+  return pokemonList;
 }
 
 function encodeName(name) {
