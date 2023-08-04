@@ -319,10 +319,24 @@ export function getSpeciesName(speciesString) {
 
 export async function getForeignName(pokemon, language) {
   await pokemon.getNo();
-  const response = await fetch(
-    `https://pokeapi.co/api/v2/pokemon-species/${pokemon.dexNo}`
-  );
-  var rawNames = (await response.json()).names;
+  var rawNames;
+  //check if dexNo is above 9999 which indicates pokemon's name is an alternate form
+  if (pokemon.dexNo > 9999) {
+    const response = await fetch(
+      `https://pokeapi.co/api/v2/pokemon/${pokemon.encodeName(pokemon.name)}`
+    );
+
+    var speciesURL = (await response.json()).species.url;
+
+    const response2 = await fetch(speciesURL);
+    rawNames = (await response2.json()).names;
+  } else {
+    const response = await fetch(
+      `https://pokeapi.co/api/v2/pokemon-species/${pokemon.dexNo}`
+    );
+    rawNames = (await response.json()).names;
+  }
+
   var name;
   for (let i = 0; i < rawNames.length; i++) {
     if (rawNames[i].language.name === language) {
