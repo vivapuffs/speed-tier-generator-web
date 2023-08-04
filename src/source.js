@@ -349,7 +349,7 @@ export async function convertBBCodeToList(data, speedStageConversionTable) {
           parsedList[i + 3],
           parsedList[i + 5],
           parsedList[i + 6],
-          "unknown", //speed is already calculated so this shouldn't cause any problems
+          0, //we can't determine level without another calculation since level is not included in the tier list.
           nature,
           parsedList[i],
           speedStage

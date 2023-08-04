@@ -119,7 +119,7 @@ function SimpleDialog(props) {
             />{" "}
             {pokemon.name}
           </span>
-          <span>Level: {pokemon.level === 0 ? 1 : pokemon.level}</span>
+          <span>Level: {pokemon.level === 0 ? "unknown" : pokemon.level}</span>
           <span>EVs: {pokemon.ev}</span>
           <span>IV: {pokemon.iv}</span>
           <span>

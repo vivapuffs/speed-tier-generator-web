@@ -260,3 +260,20 @@ describe("import set: ", async () => {
     expect(pokemon.level).to.equal(5);
   });
 });
+
+describe("import bulk: ", async () => {
+  it("bulk with valid input", async () => {
+    var text = `Scream Tail,Arcanine-Hisui,Dragapult`;
+
+    var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
+    expect(pokemon.level).to.equal(5);
+  });
+});
+
+//TODO
+
+//Test Bulk import functionality - valid and invalid input
+
+//Test Import existing list functionality - valid and invalid list
+
+//Test Duplicate filter
