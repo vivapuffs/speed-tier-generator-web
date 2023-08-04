@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/speed-tier-generator-web/static/css/main.eaaaf34a.css",
-    "main.js": "/speed-tier-generator-web/static/js/main.732fa602.js",
+    "main.js": "/speed-tier-generator-web/static/js/main.b92cb56a.js",
     "static/js/787.471bb62c.chunk.js": "/speed-tier-generator-web/static/js/787.471bb62c.chunk.js",
     "static/media/roboto-latin-500-normal.woff2": "/speed-tier-generator-web/static/media/roboto-latin-500-normal.f25d774ecfe0996f8eb5.woff2",
     "static/media/roboto-latin-700-normal.woff2": "/speed-tier-generator-web/static/media/roboto-latin-700-normal.227c93190fe7f82de3f8.woff2",
@@ -61,11 +61,11 @@
     "static/media/roboto-greek-ext-700-normal.woff": "/speed-tier-generator-web/static/media/roboto-greek-ext-700-normal.249853776d22a271b2b5.woff",
     "index.html": "/speed-tier-generator-web/index.html",
     "main.eaaaf34a.css.map": "/speed-tier-generator-web/static/css/main.eaaaf34a.css.map",
-    "main.732fa602.js.map": "/speed-tier-generator-web/static/js/main.732fa602.js.map",
+    "main.b92cb56a.js.map": "/speed-tier-generator-web/static/js/main.b92cb56a.js.map",
     "787.471bb62c.chunk.js.map": "/speed-tier-generator-web/static/js/787.471bb62c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.eaaaf34a.css",
-    "static/js/main.732fa602.js"
+    "static/js/main.b92cb56a.js"
   ]
 }
