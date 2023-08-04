@@ -278,10 +278,11 @@ export async function getPokemonFromImportable(importable, options) {
 
 //function that parses the species from the first line of the importable
 export function getSpeciesName(speciesString) {
+  console.log(speciesString);
   var species = speciesString;
   //Meowstic (M) and Meowstic (F) need to be adjusted accordingly
   if (species.includes("Meowstic")) {
-    if (species.includes("(F)")) {
+    if (species.includes("-F")) {
       species = "Meowstic-Female";
     } else {
       species = "Meowstic-Male";
@@ -314,6 +315,13 @@ export function getSpeciesName(speciesString) {
   //check if var has a ( or ) and remove them
   species = species.replace("(", "");
   species = species.replace(")", "");
+  if (
+    species === "Basculin" &&
+    species.includes("Blue") === false &&
+    species.includes("White") === false
+  ) {
+    species = "Basculin-Red-Striped";
+  }
   return species;
 }
 

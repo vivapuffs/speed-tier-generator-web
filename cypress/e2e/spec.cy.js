@@ -309,7 +309,7 @@ describe("import bulk: ", async () => {
     expect(pokemon[1].nature).to.equal(1.1);
     expect(pokemon[1].speedStage).to.equal(1);
     expect(pokemon[1].calculatedSpeed).to.equal(306);
-    expect(pokemon[1].dexNo).to.equal(59);
+    expect(pokemon[1].dexNo).to.equal(10230);
 
     expect(pokemon[2].name).to.equal("Dragapult");
     expect(pokemon[2].baseSpeed).to.equal(142);
@@ -352,14 +352,13 @@ describe("import bulk: ", async () => {
     expect(pokemon[1].nature).to.equal(1.1);
     expect(pokemon[1].speedStage).to.equal(1);
     expect(pokemon[1].calculatedSpeed).to.equal(306);
-    expect(pokemon[1].dexNo).to.equal(59);
+    expect(pokemon[1].dexNo).to.equal(10230);
   });
 });
 
 describe("import bulk: ", async () => {
   it("bulk with no valid input", async () => {
     var text = `asdjsakda,das,dajsda,`;
-
     var pokemon = await getPokemonFromList(text, {
       iv: 31,
       ev: 252,
@@ -367,7 +366,7 @@ describe("import bulk: ", async () => {
       nature: 1.1,
       speedStage: 1,
     });
-    expect(pokemon).to.equal(null);
+    expect(pokemon.length).to.equal(0);
   });
 });
 
@@ -376,3 +375,68 @@ describe("import bulk: ", async () => {
 //Test Import existing list functionality - valid and invalid list
 
 //Test Duplicate filter
+
+//Edge cases
+describe("import meowstic-m: ", async () => {
+  it("male", async () => {
+    var text = `Meowstic-M @ Eject Button
+    Ability: Prankster
+    EVs: 252 HP / 4 SpA / 252 SpD
+    Timid Nature
+    - Reflect
+    - Light Screen
+    - Yawn
+    - Psychic`;
+
+    var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
+    expect(pokemon.name).to.equal("Meowstic-Male");
+  });
+});
+
+describe("import meowstic-f: ", async () => {
+  it("female", async () => {
+    var text = `Meowstic-F @ Eject Button
+    Ability: Prankster
+    EVs: 252 HP / 4 SpA / 252 SpD
+    Timid Nature
+    - Reflect
+    - Light Screen
+    - Yawn
+    - Psychic`;
+
+    var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
+    expect(pokemon.name).to.equal("Meowstic-Female");
+  });
+});
+
+describe("import basculin: ", async () => {
+  it("default", async () => {
+    var text = `Basculin @ Choice Scarf
+      Ability: Adaptability
+      EVs: 252 Atk / 4 SpD / 252 Spe
+      Jolly Nature
+      - Liquidation
+      - Flip Turn
+      - Crunch
+      - Superpower`;
+
+    var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
+    expect(pokemon.name).to.equal("Basculin-White-Striped");
+  });
+});
+
+describe("import basculin: ", async () => {
+  it("white striped", async () => {
+    var text = `Basculin-White-Striped @ Choice Scarf
+      Ability: Adaptability
+      EVs: 252 Atk / 4 SpD / 252 Spe
+      Jolly Nature
+      - Liquidation
+      - Flip Turn
+      - Crunch
+      - Superpower`;
+
+    var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
+    expect(pokemon.name).to.equal("Basculin-White-Striped");
+  });
+});
