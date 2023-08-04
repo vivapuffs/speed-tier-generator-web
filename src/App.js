@@ -6,10 +6,13 @@ import "@fontsource/roboto/700.css";
 import "./App.css";
 import { useState } from "react";
 import TextEntryBox from "./TextEntryBox.js";
+import PokemonDisplay from "./Pokemon.js";
+//import { Pokemon } from "./source.js";
 import ImportOptionsToolbar from "./ImportOptionsToolbar.js";
-import Badge from "@mui/material/Badge";
 
 function App() {
+  //var testPokemon = new Pokemon("Mew", 100, 31, 252, 100, 1.1, 328, 1);
+
   //so badges show properly
   const speedStageConversionTable = {
     0.5: "-2",
@@ -42,15 +45,13 @@ function App() {
         <h1>Added Pokemon:</h1>
         {list.map((pokemon, idx) => {
           return (
-            <Badge
-              badgeContent={speedStageConversionTable[pokemon.speedStage]}
-              color={parseInt(pokemon.speedStage) > 0 ? "success" : "error"}
-            >
-              <img
-                src={`https://www.smogon.com/forums//media/minisprites/${pokemon.encodeName()}.png`}
-                alt={pokemon.name}
-              />
-            </Badge>
+            <PokemonDisplay
+              pokemon={pokemon}
+              speedStageConversionTable={speedStageConversionTable}
+              useState={useState}
+              list={list}
+              setList={setList}
+            />
           );
         })}
       </header>

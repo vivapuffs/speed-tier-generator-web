@@ -11,3 +11,18 @@ div {
   height: auto;
   display: inline-block;
 }
+
+.popUpDivider {
+  width: auto;
+  height: 5px;
+  display: inline-block;
+}
+
+.pokemonPopUp {
+  padding: 10px;
+}
+
+.deleteButton {
+  color: white;
+  background-color: #f44336;
+}
