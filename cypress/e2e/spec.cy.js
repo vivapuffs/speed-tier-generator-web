@@ -265,8 +265,43 @@ describe("import bulk: ", async () => {
   it("bulk with valid input", async () => {
     var text = `Scream Tail,Arcanine-Hisui,Dragapult`;
 
-    var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
-    expect(pokemon.level).to.equal(5);
+    var pokemon = await getPokemonFromList(text, {
+      iv: 31,
+      ev: 252,
+      level: 100,
+      nature: 1.1,
+      speedStage: 1,
+    });
+    expect(pokemon[0].name).to.equal("Scream Tail");
+    expect(pokemon[0].baseSpeed).to.equal(111);
+    expect(pokemon[0].iv).to.equal(31);
+    expect(pokemon[0].ev).to.equal(252);
+    expect(pokemon[0].level).to.equal(100);
+    expect(pokemon[0].nature).to.equal(1.1);
+    expect(pokemon[0].speedStage).to.equal(1);
+    expect(pokemon[0].calculatedSpeed).to.equal(353);
+    expect(pokemon[0].dexNo).to.equal(985);
+
+    expect(pokemon[1].name).to.equal("Arcanine-Hisui");
+    expect(pokemon[1].baseSpeed).to.equal(90);
+    expect(pokemon[1].iv).to.equal(31);
+    expect(pokemon[1].ev).to.equal(252);
+    expect(pokemon[1].level).to.equal(100);
+    expect(pokemon[1].nature).to.equal(1.1);
+    expect(pokemon[1].speedStage).to.equal(1);
+    expect(pokemon[1].calculatedSpeed).to.equal(306);
+    //hisui forms don't grab dex number correctly
+    //expect(pokemon[1].dexNo).to.equal(59);
+
+    expect(pokemon[2].name).to.equal("Dragapult");
+    expect(pokemon[2].baseSpeed).to.equal(142);
+    expect(pokemon[2].iv).to.equal(31);
+    expect(pokemon[2].ev).to.equal(252);
+    expect(pokemon[2].level).to.equal(100);
+    expect(pokemon[2].nature).to.equal(1.1);
+    expect(pokemon[2].speedStage).to.equal(1);
+    expect(pokemon[2].calculatedSpeed).to.equal(421);
+    expect(pokemon[2].dexNo).to.equal(887);
   });
 });
 

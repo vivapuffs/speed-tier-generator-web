@@ -14,7 +14,7 @@ export class Pokemon {
     pokemonSpeedStage
   ) {
     this.name = pokemonName; //species of Pokemon
-    this.dexNo = 0; //dex number (for getting minisprite)
+    this.dexNo = 0; //dex number (for getting foreign names)
 
     //variables for calculating speed
     this.baseSpeed = parseInt(pokemonBaseSpeed); //the pokemon's base speed stat
@@ -38,7 +38,21 @@ export class Pokemon {
     const response = await fetch(
       `https://pokeapi.co/api/v2/pokemon/${this.encodeName(this.name)}`
     );
-    this.dexNo = parseInt((await response.json()).id);
+
+    var dexNo = parseInt((await response.json()).id);
+
+    //alternate forms have a dex number of > 10000 on pokeAPI instead of their proper dex numbers
+    if (dexNo < 9999) {
+      this.dexNo = dexNo;
+    } else {
+      var name = this.encodeName(this.name);
+      //get the species name
+      name = name.split("-")[0];
+      const response = await fetch(
+        `https://pokeapi.co/api/v2/pokemon/${encodeName(name)}`
+      );
+      this.dexNo = parseInt((await response.json()).id);
+    }
   };
 
   //encode name for use with pokeAPI
