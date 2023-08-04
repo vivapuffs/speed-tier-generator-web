@@ -40,9 +40,10 @@ export class Pokemon {
     );
 
     var dexNo = parseInt((await response.json()).id);
-
+    this.dexNo = dexNo;
+    //alternate forms will block translated output: need to adjust this somehow
     //alternate forms have a dex number of > 10000 on pokeAPI instead of their proper dex numbers
-    if (dexNo < 9999) {
+    /*     if (dexNo < 9999) {
       this.dexNo = dexNo;
     } else {
       var name = this.encodeName(this.name);
@@ -52,7 +53,7 @@ export class Pokemon {
         `https://pokeapi.co/api/v2/pokemon/${encodeName(name)}`
       );
       this.dexNo = parseInt((await response.json()).id);
-    }
+    } */
   };
 
   //encode name for use with pokeAPI
@@ -278,6 +279,15 @@ export async function getPokemonFromImportable(importable, options) {
 //function that parses the species from the first line of the importable
 export function getSpeciesName(speciesString) {
   var species = speciesString;
+  //Meowstic (M) and Meowstic (F) need to be adjusted accordingly
+  if (species.includes("Meowstic")) {
+    if (species.includes("(F)")) {
+      species = "Meowstic-Female";
+    } else {
+      species = "Meowstic-Male";
+    }
+  }
+
   var bracketRegex = /\(([^()]*)\)/g;
   //remove gender markers
   species = species.replace("(M)", "");

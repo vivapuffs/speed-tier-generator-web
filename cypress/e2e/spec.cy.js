@@ -20,6 +20,24 @@ describe("import test: ", async () => {
 });
 
 describe("import test: ", async () => {
+  it("pokemon with gender only", async () => {
+    var text = `Smoochum (F)
+    Ability: Oblivious  
+    Level: 5  
+    EVs: 236 SpA / 236 Spe  
+    Timid Nature  
+    IVs: 2 Atk / 30 SpA  
+    - Ice Beam  
+    - Psychic  
+    - Hidden Power [Grass]  
+    - Substitute`;
+
+    var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
+    expect(pokemon.name).to.equal("Smoochum");
+  });
+});
+
+describe("import test: ", async () => {
   it("pokemon with item only", async () => {
     var text = `Smoochum @ Salac Berry
     Ability: Oblivious  
@@ -261,6 +279,7 @@ describe("import set: ", async () => {
   });
 });
 
+//Bulk Import Tests
 describe("import bulk: ", async () => {
   it("bulk with valid input", async () => {
     var text = `Scream Tail,Arcanine-Hisui,Dragapult`;
@@ -290,8 +309,7 @@ describe("import bulk: ", async () => {
     expect(pokemon[1].nature).to.equal(1.1);
     expect(pokemon[1].speedStage).to.equal(1);
     expect(pokemon[1].calculatedSpeed).to.equal(306);
-    //hisui forms don't grab dex number correctly
-    //expect(pokemon[1].dexNo).to.equal(59);
+    expect(pokemon[1].dexNo).to.equal(59);
 
     expect(pokemon[2].name).to.equal("Dragapult");
     expect(pokemon[2].baseSpeed).to.equal(142);
@@ -305,9 +323,55 @@ describe("import bulk: ", async () => {
   });
 });
 
-//TODO
+describe("import bulk: ", async () => {
+  it("bulk with some valid input", async () => {
+    var text = `Scream Tail,Agumon,Arcanine-Hisui,`;
 
-//Test Bulk import functionality - valid and invalid input
+    var pokemon = await getPokemonFromList(text, {
+      iv: 31,
+      ev: 252,
+      level: 100,
+      nature: 1.1,
+      speedStage: 1,
+    });
+    expect(pokemon[0].name).to.equal("Scream Tail");
+    expect(pokemon[0].baseSpeed).to.equal(111);
+    expect(pokemon[0].iv).to.equal(31);
+    expect(pokemon[0].ev).to.equal(252);
+    expect(pokemon[0].level).to.equal(100);
+    expect(pokemon[0].nature).to.equal(1.1);
+    expect(pokemon[0].speedStage).to.equal(1);
+    expect(pokemon[0].calculatedSpeed).to.equal(353);
+    expect(pokemon[0].dexNo).to.equal(985);
+
+    expect(pokemon[1].name).to.equal("Arcanine-Hisui");
+    expect(pokemon[1].baseSpeed).to.equal(90);
+    expect(pokemon[1].iv).to.equal(31);
+    expect(pokemon[1].ev).to.equal(252);
+    expect(pokemon[1].level).to.equal(100);
+    expect(pokemon[1].nature).to.equal(1.1);
+    expect(pokemon[1].speedStage).to.equal(1);
+    expect(pokemon[1].calculatedSpeed).to.equal(306);
+    expect(pokemon[1].dexNo).to.equal(59);
+  });
+});
+
+describe("import bulk: ", async () => {
+  it("bulk with no valid input", async () => {
+    var text = `asdjsakda,das,dajsda,`;
+
+    var pokemon = await getPokemonFromList(text, {
+      iv: 31,
+      ev: 252,
+      level: 100,
+      nature: 1.1,
+      speedStage: 1,
+    });
+    expect(pokemon).to.equal(null);
+  });
+});
+
+//TODO
 
 //Test Import existing list functionality - valid and invalid list
 
