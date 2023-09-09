@@ -1,6 +1,7 @@
 import { getPokemonFromList } from "..\\..\\src\\source.js";
 import { getPokemonFromImportable } from "..\\..\\src\\source.js";
 
+//Set import tests
 describe("import test: ", async () => {
   it("pokemon with no item, gender or nickname", async () => {
     var text = `Smoochum
@@ -279,7 +280,7 @@ describe("import set: ", async () => {
   });
 });
 
-//Bulk Import Tests
+//Bulk import tests
 describe("import bulk: ", async () => {
   it("bulk with valid input", async () => {
     var text = `Scream Tail,Arcanine-Hisui,Dragapult`;
@@ -421,7 +422,7 @@ describe("import basculin: ", async () => {
       - Superpower`;
 
     var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
-    expect(pokemon.name).to.equal("Basculin-White-Striped");
+    expect(pokemon.name).to.equal("Basculin-Red-Striped");
   });
 });
 
@@ -438,5 +439,21 @@ describe("import basculin: ", async () => {
 
     var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
     expect(pokemon.name).to.equal("Basculin-White-Striped");
+  });
+});
+
+describe("import kommo-o: ", async () => {
+  it("", async () => {
+    var text = `Kommo-o @ Leftovers
+    Ability: Bulletproof
+    EVs: 252 HP / 148 Def / 40 SpD / 68 Spe
+    Impish Nature
+    - Body Press
+    - Earthquake
+    - Stealth Rock
+    - Toxic`;
+
+    var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
+    expect(pokemon.name).to.equal("Kommo-o");
   });
 });

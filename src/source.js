@@ -426,3 +426,19 @@ function encodeName(name) {
   encodedName = encodedName.replace(".", "");
   return encodedName;
 }
+
+export function duplicateFilter(x, y) {
+  if (x.name === y.name) {
+    if (x.calculatedSpeed === y.calculatedSpeed) {
+      if (x.ev === y.ev) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  } else {
+    return true;
+  }
+}
