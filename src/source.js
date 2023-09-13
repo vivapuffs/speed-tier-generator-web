@@ -41,19 +41,6 @@ export class Pokemon {
 
     var dexNo = parseInt((await response.json()).id);
     this.dexNo = dexNo;
-    //alternate forms will block translated output: need to adjust this somehow
-    //alternate forms have a dex number of > 10000 on pokeAPI instead of their proper dex numbers
-    /*     if (dexNo < 9999) {
-      this.dexNo = dexNo;
-    } else {
-      var name = this.encodeName(this.name);
-      //get the species name
-      name = name.split("-")[0];
-      const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${encodeName(name)}`
-      );
-      this.dexNo = parseInt((await response.json()).id);
-    } */
   };
 
   //encode name for use with pokeAPI
@@ -376,9 +363,9 @@ export async function convertBBCodeToList(data, speedStageConversionTable) {
 
       //determine nature
       var nature =
-        parsedList[i + 4] === "Positive"
+        parsedList[i + 4].trim() === "Positive"
           ? 1.1
-          : parsedList[i + 4] === "Neutral"
+          : parsedList[i + 4].trim() === "Neutral"
           ? 1
           : 0.9;
 
@@ -386,12 +373,11 @@ export async function convertBBCodeToList(data, speedStageConversionTable) {
       var speedStage = parsedList[i + 7];
       var index = speedStage.indexOf("[");
       speedStage = speedStage.slice(0, index);
-      speedStage = speedStageConversionTable[speedStage];
 
       //pokemon taken from a speed tier list SHOULD have a valid name, but just in case validate it anyways
       if (response.status === 200 && name !== "") {
         var pokemon = new Pokemon(
-          name,
+          name.trim(),
           parsedList[i + 3],
           parsedList[i + 5],
           parsedList[i + 6],

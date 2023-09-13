@@ -22,10 +22,6 @@ export default function TextEntryBox({ list, setList, options }) {
   };
 
   async function addClick() {
-    //add if/else to check if the mode is Bulk or Set
-    //if bulk, get the list from the input textbox, generate a pokemon list, then add that list to the list.
-    //
-    //if set, get set from input textbox and add it to the list.
     var pokemon;
     if (options.mode === "set") {
       pokemon = await getPokemonFromImportable(text, options);

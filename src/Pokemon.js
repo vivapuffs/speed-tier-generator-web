@@ -79,7 +79,7 @@ function SimpleDialog(props) {
         },
       }}
     >
-      <div class="pokemonPopUp">
+      <div className="pokemonPopUp">
         <div
           style={{
             textAlign: "right",
