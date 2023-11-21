@@ -117,6 +117,7 @@ export async function generateOutput(
         ? "Neutral"
         : "Negative";
 
+    console.log(pokemon.speedStage);
     //basic line for now, can be improved to add multiple pokemon on one line.
     output += `[TR][TD]${pokemon.calculatedSpeed}[/TD][TD]:${
       pokemon.name
@@ -265,7 +266,7 @@ export async function getPokemonFromImportable(importable, options) {
 
 //function that parses the species from the first line of the importable
 export function getSpeciesName(speciesString) {
-  console.log(speciesString);
+  //console.log(speciesString);
   var species = speciesString;
   //Meowstic (M) and Meowstic (F) need to be adjusted accordingly
   if (species.includes("Meowstic")) {
@@ -372,7 +373,21 @@ export async function convertBBCodeToList(data, speedStageConversionTable) {
       //determine speed stage
       var speedStage = parsedList[i + 7];
       var index = speedStage.indexOf("[");
-      speedStage = speedStage.slice(0, index);
+      speedStage = speedStage.slice(0, index).trim();
+
+      const reverseSpeedStageConversionTable = {
+        "-2": 0.5,
+        "-1": 0.67,
+        0: 1,
+        "+1": 1.5,
+        "+2": 2,
+      };
+
+      console.log(speedStage);
+      console.log(reverseSpeedStageConversionTable[speedStage]);
+
+      //convert speed from plaintext to proper number
+      speedStage = reverseSpeedStageConversionTable[speedStage];
 
       //pokemon taken from a speed tier list SHOULD have a valid name, but just in case validate it anyways
       if (response.status === 200 && name !== "") {

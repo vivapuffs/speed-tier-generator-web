@@ -56,15 +56,19 @@ function SimpleDialog(props) {
         "Are you sure you want to remove this Pokemon from the list?"
       )
     ) {
-      console.log(list);
+      //console.log(list);
       //this is so ugly
       var result = list.filter((listPokemon) =>
         duplicateFilter(listPokemon, pokemon)
       );
-      console.log(result);
+      //console.log(result);
       setList(result);
     }
     onClose(value);
+  };
+
+  const handleSave = (values) => {
+    //get values
   };
 
   //PaperProps removes the ugly drop shadow from the Pokemon dialog
@@ -90,7 +94,7 @@ function SimpleDialog(props) {
           }}
           onClick={handleClose}
         >
-          X
+          🞪
         </div>
         <br />
         <Stack spacing={1}>
@@ -104,21 +108,56 @@ function SimpleDialog(props) {
             />{" "}
             {pokemon.name}
           </span>
-          <span>Level: {pokemon.level === 0 ? "unknown" : pokemon.level}</span>
-          <span>EVs: {pokemon.ev}</span>
-          <span>IV: {pokemon.iv}</span>
+          <span>
+            Level:{" "}
+            <input
+              type="text"
+              id="level"
+              size="3"
+              defaultValue={pokemon.level === 0 ? "unknown" : pokemon.level}
+            ></input>
+          </span>
+          <span>
+            EVs:{" "}
+            <input
+              type="text"
+              id="ev"
+              size="3"
+              defaultValue={pokemon.ev}
+            ></input>
+          </span>
+          <span>
+            IV:{" "}
+            <input
+              type="text"
+              id="iv"
+              size="3"
+              defaultValue={pokemon.iv}
+            ></input>
+          </span>
           <span>
             Nature:{" "}
-            {pokemon.nature === 1.1
-              ? "Positive"
-              : pokemon.nature === 1
-              ? "Neutral"
-              : "Negative"}
+            <select
+              id="nature"
+              defaultValue={
+                pokemon.nature === 1.1
+                  ? "Positive"
+                  : pokemon.nature === 1
+                  ? "Neutral"
+                  : "Negative"
+              }
+            >
+              <option value="Positive">Positive</option>
+              <option value="Neutral">Neutral</option>
+              <option value="Negative">Negative</option>
+            </select>
           </span>
           <span>Base Speed: {pokemon.baseSpeed}</span>
           <span>Calculated Speed: {pokemon.calculatedSpeed}</span>
           <span>
             <center>
+              <button onClick={handleSave}>Save</button>
+              <div class="divider" />
               <button
                 style={{
                   color: "white",
