@@ -116,8 +116,6 @@ export async function generateOutput(
         : pokemon.nature === 1
         ? "Neutral"
         : "Negative";
-
-    console.log(pokemon.speedStage);
     //basic line for now, can be improved to add multiple pokemon on one line.
     output += `[TR][TD]${pokemon.calculatedSpeed}[/TD][TD]:${
       pokemon.name
@@ -382,9 +380,6 @@ export async function convertBBCodeToList(data, speedStageConversionTable) {
         "+1": 1.5,
         "+2": 2,
       };
-
-      console.log(speedStage);
-      console.log(reverseSpeedStageConversionTable[speedStage]);
 
       //convert speed from plaintext to proper number
       speedStage = reverseSpeedStageConversionTable[speedStage];
