@@ -9,6 +9,7 @@ import TextEntryBox from "./TextEntryBox.js";
 import PokemonDisplay from "./Pokemon.js";
 //import { Pokemon } from "./source.js";
 import ImportOptionsToolbar from "./ImportOptionsToolbar.js";
+import Grid from '@mui/material/Grid';
 
 function App() {
   //var testPokemon = new Pokemon("Mew", 100, 31, 252, 100, 1.1, 328, 1);
@@ -32,16 +33,17 @@ function App() {
     language: "en",
   });
   return (
-    <div className="App">
-      <header className="App-header">
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-        />
-        <h1>Options</h1>
-        <ImportOptionsToolbar options={options} setOptions={setOptions} />
+    <div classame="App">
+      <Grid container spacing={2} disableColumnResize={true}>
+        <Grid item xs={4}>
+          <h1>Options</h1>
+          <ImportOptionsToolbar options={options} setOptions={setOptions} />
+        </Grid>
+        <Grid item xs={4}>
         <h1>Enter Pokemon here...</h1>
         <TextEntryBox list={list} setList={setList} options={options} />
+        </Grid>
+        <Grid item xs={4} >
         <h1>Added Pokemon:</h1>
         {list.map((pokemon, idx) => {
           return (
@@ -54,7 +56,8 @@ function App() {
             />
           );
         })}
-      </header>
+                </Grid>
+        </Grid>
       <p>
         by{" "}
         <a href="https://www.smogon.com/forums/members/grape-tylenol.593128/">
