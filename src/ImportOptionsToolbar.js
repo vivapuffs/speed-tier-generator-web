@@ -74,7 +74,8 @@ export default function ImportOptionsToolbar({ options, setOptions }) {
       />
       <label for="speedStage">+2</label>
       <br />
-      <p>Output Language:</p>
+      {/* language selector - temporarily removed */}
+      {/*<p>Output Language:</p>
       <input
         type="radio"
         onChange={(e) => setOptions({ ...options, language: e.target.value })}
@@ -153,7 +154,7 @@ export default function ImportOptionsToolbar({ options, setOptions }) {
         name="language"
         value="zh-Hans"
       />
-      <label for="language">cn (simplified)</label>
+      <label for="language">cn (simplified)</label>*/}
     </form>
   );
 }

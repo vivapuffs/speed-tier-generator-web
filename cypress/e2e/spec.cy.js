@@ -186,7 +186,6 @@ describe("import set: ", async () => {
     expect(pokemon.nature).to.equal(1.1);
     expect(pokemon.speedStage).to.equal(1);
     expect(pokemon.calculatedSpeed).to.equal(348);
-    expect(pokemon.dexNo).to.equal(1009);
   });
 });
 
@@ -300,7 +299,6 @@ describe("import bulk: ", async () => {
     expect(pokemon[0].nature).to.equal(1.1);
     expect(pokemon[0].speedStage).to.equal(1);
     expect(pokemon[0].calculatedSpeed).to.equal(353);
-    expect(pokemon[0].dexNo).to.equal(985);
 
     expect(pokemon[1].name).to.equal("Arcanine-Hisui");
     expect(pokemon[1].baseSpeed).to.equal(90);
@@ -310,7 +308,6 @@ describe("import bulk: ", async () => {
     expect(pokemon[1].nature).to.equal(1.1);
     expect(pokemon[1].speedStage).to.equal(1);
     expect(pokemon[1].calculatedSpeed).to.equal(306);
-    expect(pokemon[1].dexNo).to.equal(10230);
 
     expect(pokemon[2].name).to.equal("Dragapult");
     expect(pokemon[2].baseSpeed).to.equal(142);
@@ -320,7 +317,6 @@ describe("import bulk: ", async () => {
     expect(pokemon[2].nature).to.equal(1.1);
     expect(pokemon[2].speedStage).to.equal(1);
     expect(pokemon[2].calculatedSpeed).to.equal(421);
-    expect(pokemon[2].dexNo).to.equal(887);
   });
 });
 
@@ -343,7 +339,6 @@ describe("import bulk: ", async () => {
     expect(pokemon[0].nature).to.equal(1.1);
     expect(pokemon[0].speedStage).to.equal(1);
     expect(pokemon[0].calculatedSpeed).to.equal(353);
-    expect(pokemon[0].dexNo).to.equal(985);
 
     expect(pokemon[1].name).to.equal("Arcanine-Hisui");
     expect(pokemon[1].baseSpeed).to.equal(90);
@@ -353,7 +348,6 @@ describe("import bulk: ", async () => {
     expect(pokemon[1].nature).to.equal(1.1);
     expect(pokemon[1].speedStage).to.equal(1);
     expect(pokemon[1].calculatedSpeed).to.equal(306);
-    expect(pokemon[1].dexNo).to.equal(10230);
   });
 });
 
@@ -380,7 +374,7 @@ describe("import bulk: ", async () => {
 //Edge cases
 describe("import meowstic-m: ", async () => {
   it("male", async () => {
-    var text = `Meowstic-M @ Eject Button
+    var text = `Meowstic (M) @ Eject Button
     Ability: Prankster
     EVs: 252 HP / 4 SpA / 252 SpD
     Timid Nature
@@ -390,13 +384,13 @@ describe("import meowstic-m: ", async () => {
     - Psychic`;
 
     var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
-    expect(pokemon.name).to.equal("Meowstic-Male");
+    expect(pokemon.name).to.equal("Meowstic");
   });
 });
 
 describe("import meowstic-f: ", async () => {
   it("female", async () => {
-    var text = `Meowstic-F @ Eject Button
+    var text = `Meowstic-F (F) @ Eject Button
     Ability: Prankster
     EVs: 252 HP / 4 SpA / 252 SpD
     Timid Nature
@@ -406,7 +400,7 @@ describe("import meowstic-f: ", async () => {
     - Psychic`;
 
     var pokemon = await getPokemonFromImportable(text, { speedStage: 1 });
-    expect(pokemon.name).to.equal("Meowstic-Female");
+    expect(pokemon.name).to.equal("Meowstic-F");
   });
 });
 

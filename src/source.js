@@ -1,6 +1,8 @@
 //TODOs:
 //write function for verifying pokemon name exists instead of copypasting
 
+import {Dex} from '@pkmn/dex';
+
 //class for storing pokemon data
 export class Pokemon {
   constructor(
@@ -14,7 +16,6 @@ export class Pokemon {
     pokemonSpeedStage
   ) {
     this.name = pokemonName; //species of Pokemon
-    this.dexNo = 0; //dex number (for getting foreign names)
 
     //variables for calculating speed
     this.baseSpeed = parseInt(pokemonBaseSpeed); //the pokemon's base speed stat
@@ -28,34 +29,7 @@ export class Pokemon {
   }
 
   getBaseSpeed = async function () {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${this.encodeName(this.name)}`
-    );
-    this.baseSpeed = parseInt((await response.json()).stats[5].base_stat);
-  };
-
-  getNo = async function () {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${this.encodeName(this.name)}`
-    );
-
-    var dexNo = parseInt((await response.json()).id);
-    this.dexNo = dexNo;
-  };
-
-  //encode name for use with pokeAPI
-  encodeName = function () {
-    var encodedName = this.name;
-    encodedName = encodedName.toLowerCase();
-    //replace " " with -
-    encodedName = encodedName.replace(" ", "-");
-    //replace "'" with ""
-    encodedName = encodedName.replace("’", "");
-    //replace ":" with ""
-    encodedName = encodedName.replace(":", "");
-    //replace "." with ""
-    encodedName = encodedName.replace(".", "");
-    return encodedName;
+    this.baseSpeed = parseInt(Dex.species.get(this.name).baseStats.spe);
   };
 
   //calculate the base speed stat
@@ -87,6 +61,20 @@ export class Pokemon {
     result += 5;
     this.calculatedSpeed = result;
   };
+
+   encodeName = function() {
+    var encodedName = this.name;
+    encodedName = encodedName.toLowerCase();
+    //replace " " with -
+    encodedName = encodedName.replace(" ", "-");
+    //replace "'" with ""
+    encodedName = encodedName.replace("’", "");
+    //replace ":" with ""
+    encodedName = encodedName.replace(":", "");
+    //replace "." with ""
+    encodedName = encodedName.replace(".", "");
+    return encodedName;
+  }
 }
 
 //formats the speed tier post and writes it to output.txt
@@ -119,9 +107,8 @@ export async function generateOutput(
     //basic line for now, can be improved to add multiple pokemon on one line.
     output += `[TR][TD]${pokemon.calculatedSpeed}[/TD][TD]:${
       pokemon.name
-    }:[/TD][TD]${
-      language === "en" ? pokemon.name : await getForeignName(pokemon, language)
-    }[/TD][TD]${pokemon.baseSpeed}[/TD][TD]${nature}[/TD][TD]${
+    }:[/TD][TD]${pokemon.name}
+    [/TD][TD]${pokemon.baseSpeed}[/TD][TD]${nature}[/TD][TD]${
       pokemon.iv
     }[/TD][TD]${pokemon.ev}[/TD][TD]${
       speedStageConversionTable[pokemon.speedStage]
@@ -137,14 +124,7 @@ export async function getPokemonFromList(input, options) {
   var pokemonList = [];
   for (let i = 0; i < pokemonNames.length; i++) {
     var name = pokemonNames[i];
-
-    //check if input is a valid pokemon
-    var response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${encodeName(name)}`
-    );
-
-    //pokemon/ will return 200, so we also need to check for a blank name
-    if (response.status === 200 && name !== "") {
+    if (Dex.species.get(name.replace(/[^a-z]/gi, '')).exists) {
       var pokemon = new Pokemon(
         name,
         0,
@@ -156,7 +136,6 @@ export async function getPokemonFromList(input, options) {
         options.speedStage
       );
       await pokemon.getBaseSpeed();
-      await pokemon.getNo();
       await pokemon.calculateSpeed();
       pokemonList.push(pokemon);
     } else {
@@ -184,6 +163,10 @@ export async function getPokemonFromImportable(importable, options) {
     //need to parse name from first line
     var speciesString = set.split("\n")[0];
     var name = getSpeciesName(speciesString);
+    if (!Dex.species.get(name.replace(/[^a-z]/gi, '')).exists)
+    {
+      throw new Error('invalid pokemon name');
+    }
     //could be optimized to reduce regex calls
 
     //check if speed IV is not 31, and for speed EVs
@@ -240,7 +223,6 @@ export async function getPokemonFromImportable(importable, options) {
       default:
         break;
     }
-
     var pokemon = new Pokemon(
       name,
       0,
@@ -252,7 +234,6 @@ export async function getPokemonFromImportable(importable, options) {
       options.speedStage
     );
     await pokemon.getBaseSpeed();
-    await pokemon.getNo();
     await pokemon.calculateSpeed();
     return pokemon;
     //return `[TR][TD]${pokemon.calculatedSpeed}[/TD][TD]:${pokemon.name}:[/TD][TD]${pokemon.name}[/TD][TD]${pokemon.baseSpeed}[/TD][TD]${nature}[/TD][TD]${pokemon.iv}[/TD][TD]${pokemon.ev}[/TD][TD]${pokemon.speedStage}[/TD][/TR]\n`;
@@ -264,16 +245,7 @@ export async function getPokemonFromImportable(importable, options) {
 
 //function that parses the species from the first line of the importable
 export function getSpeciesName(speciesString) {
-  //console.log(speciesString);
   var species = speciesString;
-  //Meowstic (M) and Meowstic (F) need to be adjusted accordingly
-  if (species.includes("Meowstic")) {
-    if (species.includes("-F")) {
-      species = "Meowstic-Female";
-    } else {
-      species = "Meowstic-Male";
-    }
-  }
 
   var bracketRegex = /\(([^()]*)\)/g;
   //remove gender markers
@@ -311,35 +283,6 @@ export function getSpeciesName(speciesString) {
   return species;
 }
 
-export async function getForeignName(pokemon, language) {
-  await pokemon.getNo();
-  var rawNames;
-  //check if dexNo is above 9999 which indicates pokemon's name is an alternate form
-  if (pokemon.dexNo > 9999) {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${pokemon.encodeName(pokemon.name)}`
-    );
-
-    var speciesURL = (await response.json()).species.url;
-
-    const response2 = await fetch(speciesURL);
-    rawNames = (await response2.json()).names;
-  } else {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/${pokemon.dexNo}`
-    );
-    rawNames = (await response.json()).names;
-  }
-
-  var name;
-  for (let i = 0; i < rawNames.length; i++) {
-    if (rawNames[i].language.name === language) {
-      name = rawNames[i].name;
-    }
-  }
-  return name;
-}
-
 //take in existing BBCode speed tier list and parse it
 export async function convertBBCodeToList(data, speedStageConversionTable) {
   //data order: calculatedSpeed, sprite, name, base speed, nature, IVs, EVs, boosts
@@ -354,11 +297,6 @@ export async function convertBBCodeToList(data, speedStageConversionTable) {
     //each pokemon in the list has 8 array elements related to it
     for (let i = 0; i < parsedList.length; i += 8) {
       var name = parsedList[i + 2];
-
-      //see comment re: validation below
-      var response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${encodeName(name)}`
-      );
 
       //determine nature
       var nature =
@@ -385,7 +323,6 @@ export async function convertBBCodeToList(data, speedStageConversionTable) {
       speedStage = reverseSpeedStageConversionTable[speedStage];
 
       //pokemon taken from a speed tier list SHOULD have a valid name, but just in case validate it anyways
-      if (response.status === 200 && name !== "") {
         var pokemon = new Pokemon(
           name.trim(),
           parsedList[i + 3],
@@ -396,11 +333,7 @@ export async function convertBBCodeToList(data, speedStageConversionTable) {
           parsedList[i],
           speedStage
         );
-        await pokemon.getNo();
         pokemonList.push(pokemon);
-      } else {
-        console.log("invalid pokemon found in input. skipping");
-      }
     }
     return pokemonList;
   } catch (error) {
@@ -409,19 +342,6 @@ export async function convertBBCodeToList(data, speedStageConversionTable) {
   }
 }
 
-function encodeName(name) {
-  var encodedName = name;
-  encodedName = encodedName.toLowerCase();
-  //replace " " with -
-  encodedName = encodedName.replace(" ", "-");
-  //replace "'" with ""
-  encodedName = encodedName.replace("’", "");
-  //replace ":" with ""
-  encodedName = encodedName.replace(":", "");
-  //replace "." with ""
-  encodedName = encodedName.replace(".", "");
-  return encodedName;
-}
 
 export function duplicateFilter(x, y) {
   if (x.name === y.name) {
