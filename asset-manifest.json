@@ -1,8 +1,9 @@
 {
   "files": {
     "main.css": "/speed-tier-generator-web/static/css/main.eaaaf34a.css",
-    "main.js": "/speed-tier-generator-web/static/js/main.209e175b.js",
-    "static/js/787.471bb62c.chunk.js": "/speed-tier-generator-web/static/js/787.471bb62c.chunk.js",
+    "main.js": "/speed-tier-generator-web/static/js/main.000ce5b9.js",
+    "static/js/128.522f295f.chunk.js": "/speed-tier-generator-web/static/js/128.522f295f.chunk.js",
+    "static/js/787.cc9dd55a.chunk.js": "/speed-tier-generator-web/static/js/787.cc9dd55a.chunk.js",
     "static/media/roboto-latin-500-normal.woff2": "/speed-tier-generator-web/static/media/roboto-latin-500-normal.f25d774ecfe0996f8eb5.woff2",
     "static/media/roboto-latin-700-normal.woff2": "/speed-tier-generator-web/static/media/roboto-latin-700-normal.227c93190fe7f82de3f8.woff2",
     "static/media/roboto-latin-400-normal.woff2": "/speed-tier-generator-web/static/media/roboto-latin-400-normal.b009a76ad6afe4ebd301.woff2",
@@ -61,11 +62,12 @@
     "static/media/roboto-greek-ext-700-normal.woff": "/speed-tier-generator-web/static/media/roboto-greek-ext-700-normal.249853776d22a271b2b5.woff",
     "index.html": "/speed-tier-generator-web/index.html",
     "main.eaaaf34a.css.map": "/speed-tier-generator-web/static/css/main.eaaaf34a.css.map",
-    "main.209e175b.js.map": "/speed-tier-generator-web/static/js/main.209e175b.js.map",
-    "787.471bb62c.chunk.js.map": "/speed-tier-generator-web/static/js/787.471bb62c.chunk.js.map"
+    "main.000ce5b9.js.map": "/speed-tier-generator-web/static/js/main.000ce5b9.js.map",
+    "128.522f295f.chunk.js.map": "/speed-tier-generator-web/static/js/128.522f295f.chunk.js.map",
+    "787.cc9dd55a.chunk.js.map": "/speed-tier-generator-web/static/js/787.cc9dd55a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.eaaaf34a.css",
-    "static/js/main.209e175b.js"
+    "static/js/main.000ce5b9.js"
   ]
 }
