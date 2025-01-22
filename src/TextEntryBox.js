@@ -89,9 +89,9 @@ export default function TextEntryBox({ list, setList, options }) {
         ></textarea>
         <br />
         <button onClick={addClick}>Add to list</button>
-        <div class="divider" />
+        <div className="divider" />
         <button onClick={importList}>Import existing list</button>
-        <div class="divider" />
+        <div className="divider" />
         <button onClick={clearList}>Clear list</button>
       </div>
 
@@ -102,13 +102,13 @@ export default function TextEntryBox({ list, setList, options }) {
           rows="10"
           cols="50"
           placeholder="BBCode will appear here..."
-          value={output}
+          defaultValue={output}
         ></textarea>
         <br />
         <button onClick={generateClick}>
           Generate speed tier list from added Pokemon
         </button>
-        <div class="divider" />
+        <div className="divider" />
         <button onClick={copyToClipboard}>Copy output to clipboard</button>
       </div>
     </>

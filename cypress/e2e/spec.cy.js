@@ -1,5 +1,5 @@
-import { getPokemonFromList } from "..\\..\\src\\source.js";
-import { getPokemonFromImportable } from "..\\..\\src\\source.js";
+import { getPokemonFromList } from "..\\src\\source.js";
+import { getPokemonFromImportable } from "..\\src\\source.js";
 
 //Set import tests
 describe("import test: ", async () => {
