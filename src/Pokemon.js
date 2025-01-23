@@ -65,9 +65,7 @@ function SimpleDialog(props) {
     pokemon.level = level;
     pokemon.ev = ev;
     pokemon.iv = iv;
-    console.log(pokemon.nature);
     pokemon.nature = nature;
-    console.log(pokemon.nature);
     pokemon.speedStage = speedStage;
     pokemon.calculateSpeed();
     onClose();
