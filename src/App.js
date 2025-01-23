@@ -8,7 +8,8 @@ import { useState } from "react";
 import TextEntryBox from "./TextEntryBox.js";
 import PokemonDisplay from "./Pokemon.js";
 //import { Pokemon } from "./source.js";
-import ImportOptionsToolbar from "./ImportOptionsToolbar.js";
+import SetImportOptionsToolbar from "./SetImportOptionsToolbar.js";
+import BulkImportOptionsToolbar from "./BulkImportOptionsToolbar.js";
 //import { Grid , Box } from '@mui/material';
 
 function App() {
@@ -35,7 +36,27 @@ function App() {
   return (
     <div classame="App">
           <h1>Options</h1>
-          <ImportOptionsToolbar options={options} setOptions={setOptions} />
+          <form>
+            <input
+            type="radio"
+            onChange={(e) => setOptions({ ...options, mode: e.target.value })}
+            id="importType"
+            name="importType"
+            value="bulk"
+            />
+            <label htmlFor="importType">Bulk Import</label>
+            <input
+              type="radio"
+              onChange={(e) => setOptions({ ...options, mode: e.target.value })}
+              id="importType"
+              name="importType"
+              value="set"
+              defaultChecked
+            />
+            <label htmlFor="importType">Set Import</label>
+          </form>
+          {options.mode === "set" ? <SetImportOptionsToolbar options={options} setOptions={setOptions} /> : null}
+          {options.mode === "bulk" ? <BulkImportOptionsToolbar options={options} setOptions={setOptions} /> : null}
         <h1>Enter Pokemon here...</h1>
         <TextEntryBox list={list} setList={setList} options={options} />
         <h1>Added Pokemon:</h1>

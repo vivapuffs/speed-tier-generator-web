@@ -2,6 +2,7 @@ import Dialog from "@mui/material/Dialog";
 import Badge from "@mui/material/Badge";
 import Stack from "@mui/material/Stack";
 import { duplicateFilter } from "./source.js";
+import { useId, useState } from 'react';
 
 export default function PokemonDisplay({
   pokemon,
@@ -44,9 +45,31 @@ export default function PokemonDisplay({
 }
 
 function SimpleDialog(props) {
-  const { onClose, open, pokemon, list, setList } = props;
+  const { onClose, open, pokemon, list, setList} = props;
+  const [level, setLevel] = useState(props?.value ?? pokemon.level);
+  const [ev, setEVs] = useState(props?.value ?? pokemon.ev);
+  const [iv, setIV] = useState(props?.value ?? pokemon.iv);
+  const [nature, setNature] = useState(props?.value ?? pokemon.nature);
+  const [speedStage, setSpeedStage] = useState(props?.value ?? pokemon.speedStage);
 
   const handleClose = () => {
+    setLevel(pokemon.level);
+    setEVs(pokemon.ev);
+    setIV(pokemon.iv);
+    setNature(pokemon.nature);
+    setSpeedStage(pokemon.speedStage);
+    onClose();
+  };
+
+  const handleSave = () => {
+    pokemon.level = level;
+    pokemon.ev = ev;
+    pokemon.iv = iv;
+    console.log(pokemon.nature);
+    pokemon.nature = nature;
+    console.log(pokemon.nature);
+    pokemon.speedStage = speedStage;
+    pokemon.calculateSpeed();
     onClose();
   };
 
@@ -56,19 +79,13 @@ function SimpleDialog(props) {
         "Are you sure you want to remove this Pokemon from the list?"
       )
     ) {
-      //console.log(list);
       //this is so ugly
       var result = list.filter((listPokemon) =>
         duplicateFilter(listPokemon, pokemon)
       );
-      //console.log(result);
       setList(result);
     }
     onClose(value);
-  };
-
-  const handleSave = (values) => {
-    //get values
   };
 
   //PaperProps removes the ugly drop shadow from the Pokemon dialog
@@ -114,7 +131,9 @@ function SimpleDialog(props) {
               type="text"
               id="level"
               size="3"
-              defaultValue={pokemon.level === 0 ? "unknown" : pokemon.level}
+              onInput={e => setLevel(e.target.value)}
+              value={level}
+              placeholder={pokemon.level}
             ></input>
           </span>
           <span>
@@ -123,7 +142,8 @@ function SimpleDialog(props) {
               type="text"
               id="ev"
               size="3"
-              defaultValue={pokemon.ev}
+              onInput={e => setEVs(e.target.value)}
+              value={ev}
             ></input>
           </span>
           <span>
@@ -132,24 +152,34 @@ function SimpleDialog(props) {
               type="text"
               id="iv"
               size="3"
-              defaultValue={pokemon.iv}
+              onInput={e => setIV(e.target.value)}
+              value={iv}
             ></input>
           </span>
           <span>
             Nature:{" "}
             <select
               id="nature"
-              defaultValue={
-                pokemon.nature === 1.1
-                  ? "Positive"
-                  : pokemon.nature === 1
-                  ? "Neutral"
-                  : "Negative"
-              }
-            >
-              <option value="Positive">Positive</option>
-              <option value="Neutral">Neutral</option>
-              <option value="Negative">Negative</option>
+              onInput={e => setNature(e.target.value)}
+              value={nature}
+            >              
+              <option value="1.1">Positive</option>
+              <option value="1">Neutral</option>
+              <option value="0.9">Negative</option>
+            </select>
+          </span>
+          <span>
+            Speed stage:{" "}
+            <select
+              id="speedStage"
+              onInput={e => setSpeedStage(e.target.value)}
+              value={speedStage}
+            >              
+              <option value="2">+2</option>
+              <option value="1.5">+1</option>
+              <option value="1">0</option>
+              <option value="0.67">-1</option>
+              <option value="0.5">-2</option>
             </select>
           </span>
           <span>Base Speed: {pokemon.baseSpeed}</span>
@@ -157,7 +187,7 @@ function SimpleDialog(props) {
           <span>
             <center>
               <button onClick={handleSave}>Save</button>
-              <div class="divider" />
+              <div className="divider" />
               <button
                 style={{
                   color: "white",
@@ -176,3 +206,5 @@ function SimpleDialog(props) {
     </Dialog>
   );
 }
+
+

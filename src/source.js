@@ -99,9 +99,9 @@ export async function generateOutput(
     output += "\n";
 
     var nature =
-      pokemon.nature === 1.1
+      parseFloat(pokemon.nature) === 1.1
         ? "Positive"
-        : pokemon.nature === 1
+        : parseFloat(pokemon.nature) === 1
         ? "Neutral"
         : "Negative";
     //basic line for now, can be improved to add multiple pokemon on one line.
