@@ -2,7 +2,7 @@ import Dialog from "@mui/material/Dialog";
 import Badge from "@mui/material/Badge";
 import Stack from "@mui/material/Stack";
 import { duplicateFilter } from "./source.js";
-import { useId, useState } from 'react';
+import { useState } from 'react';
 
 export default function PokemonDisplay({
   pokemon,
